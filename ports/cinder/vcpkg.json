@@ -1,0 +1,17 @@
+{
+    "name": "cinder",
+    "version": "0.9.2",
+    "description": "Cinder is a peer-reviewed, free, open source C++ library for creative coding.",
+    "homepage": "https://libcinder.org/",
+    "license": "MIT",
+    "dependencies": [
+        {
+            "name": "vcpkg-cmake",
+            "host": true
+        },
+        {
+            "name": "vcpkg-cmake-config",
+            "host": true
+        }
+    ]
+}
