@@ -2,8 +2,6 @@ CMAKE_MINIMUM_REQUIRED(VERSION 3.10 FATAL_ERROR)
 
 # vcpkg-specific CMakeLists.txt, based on Cinder's own version in the root of its repository.
 
-# TODO: add support for Android, MacOS and Linux
-
 project( cinder VERSION 0.9.2 DESCRIPTION "Cinder is a peer-reviewed, free, open source C++ library for creative coding." )
 
 set(INSTALL_BIN_DIR "${CMAKE_INSTALL_PREFIX}/bin" CACHE PATH "Installation directory for executables")
@@ -17,25 +15,36 @@ include( ${CINDER_CMAKE_DIR}/configure.cmake )
 include( ${CINDER_CMAKE_DIR}/libcinder_configure.cmake )
 include( ${CINDER_CMAKE_DIR}/libcinder_source_files.cmake )
 
-#if( CINDER_LINUX )
+# TODO: add support for Android, MacOS and Linux
+if( CINDER_MSW )
+	include( "${CINDER_CMAKE_DIR}/platform_msw.cmake" )
+#elseif( CINDER_LINUX )
 #	include( "${CINDER_CMAKE_DIR}/platform_linux.cmake" )
 #elseif( CINDER_MAC )
 #	include( "${CINDER_CMAKE_DIR}/platform_macosx.cmake" )
 #elseif( CINDER_ANDROID )
 #	include( "${CINDER_CMAKE_DIR}/platform_android.cmake" )
-if( CINDER_MSW )
-	include( "${CINDER_CMAKE_DIR}/platform_msw.cmake" )
 else()
 	message( FATAL_ERROR "no target defined for system: '${CMAKE_SYSTEM_NAME}.'" )
 endif()
 
 include( ${CINDER_CMAKE_DIR}/libcinder_target.cmake )
 
+# 
+include(CMakePackageConfigHelpers)
+
 # Install the targets.
 install(TARGETS cinder
-		RUNTIME DESTINATION "${INSTALL_BIN_DIR}"
-		ARCHIVE DESTINATION "${INSTALL_LIB_DIR}"
-		LIBRARY DESTINATION "${INSTALL_LIB_DIR}"
+		EXPORT cinderTargets
+		RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+		LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+		ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+		FRAMEWORK DESTINATION ${CMAKE_INSTALL_PREFIX}
+		PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/cinder
+)
+install(EXPORT cinderTargets
+		FILE cinder-targets.cmake
+		DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/cinder"
 )
 
 # Install all the public include files while keeping the directory structure intact.
@@ -61,6 +70,3 @@ if( CINDER_MSW )
 		install( FILES ${INC_SET_AUDIO_MSW} DESTINATION "${INSTALL_INC_DIR}/cinder/audio/msw" )
 	endif()
 endif()
-
-# This file will contain all dependencies, includes, definition, compiler flags and so on..
-# install( TARGETS cinder EXPORT cinderTargets.cmake DESTINATION ${PROJECT_BINARY_DIR}/${CINDER_LIB_DIRECTORY} )

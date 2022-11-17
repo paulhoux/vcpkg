@@ -4,28 +4,26 @@
 vcpkg_from_github(
     OUT_SOURCE_PATH SOURCE_PATH
     REPO paulhoux/Cinder
-    REF ec205b680480e884f7cef3721684f66717c77b70 # latest master with cmake fixes
-    SHA512 1714e1675d918682c3d2eae936f6c177522740a12802572edb1d5654919e959aeae304faa79890d1afe6f7376e479477da09c15d7f9a0837f42ce3588a2da62b
+    REF 26d07db12d02a6306a2f7b7ba212fdd0c2f2b237 # latest master with cmake fixes
+    SHA512 4994d7b1085709c080f0a7e0239929f4b77619248a29153d62b412e72f2129faba31ec7e0e5930bce7ba4f628d5dcf133ee004ebc387f254c7e87d0705f38f91
     HEAD_REF master
 )
 
 file(COPY "${CMAKE_CURRENT_LIST_DIR}/CMakeLists.txt" DESTINATION "${SOURCE_PATH}")
 
-if (VCPKG_LIBRARY_LINKAGE STREQUAL dynamic)
-    set(BUILD_SHARED ON)
-else()
-    set(BUILD_SHARED OFF)
-endif()
+string(COMPARE EQUAL "${VCPKG_LIBRARY_LINKAGE}" "dynamic" BUILD_SHARED)
 
 vcpkg_cmake_configure(
-    SOURCE_PATH "${SOURCE_PATH}" 
+    SOURCE_PATH "${SOURCE_PATH}"
     OPTIONS -DBUILD_SHARED_LIBS=${BUILD_SHARED}
 )
 
 vcpkg_cmake_install()
-vcpkg_copy_pdbs()
-#vcpkg_cmake_config_fixup()
+
+vcpkg_cmake_config_fixup(CONFIG_PATH lib/cmake/cinder )
 
 file(REMOVE_RECURSE "${CURRENT_PACKAGES_DIR}/debug/include")
+
+vcpkg_copy_pdbs()
 
 file(INSTALL "${SOURCE_PATH}/COPYING" DESTINATION "${CURRENT_PACKAGES_DIR}/share/${PORT}" RENAME copyright )
