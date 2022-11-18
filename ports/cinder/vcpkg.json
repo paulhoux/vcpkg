@@ -12,6 +12,14 @@
         {
             "name": "vcpkg-cmake-config",
             "host": true
-        }
+        },
+        {
+            "name" : "glad",
+            "features" : [ "extensions" ]
+        },
+        "freetype",
+        "glm",
+        "harfbuzz",
+        "libunibreak"
     ]
 }

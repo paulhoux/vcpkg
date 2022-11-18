@@ -70,3 +70,10 @@ if( CINDER_MSW )
 		install( FILES ${INC_SET_AUDIO_MSW} DESTINATION "${INSTALL_INC_DIR}/cinder/audio/msw" )
 	endif()
 endif()
+
+if( NOT CINDER_FREETYPE_USE_SYSTEM )
+	install( FILES ${INC_SET_FREETYPE} DESTINATION "${INSTALL_INC_DIR}/freetype" )
+	install( FILES ${INC_SET_FREETYPE_CONFIG} DESTINATION "${INSTALL_INC_DIR}/freetype/config" )
+endif()
+
+# TODO: also install headers for GLM, GLAD
